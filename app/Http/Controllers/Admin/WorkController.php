@@ -4,41 +4,38 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ContentRequest;
 use App\Content;
 use App\Genre;
 use Validator;
 class WorkController extends Controller
 {
     //
-    public function add()
-    {
-        return view('admin.work.create');
-        
-    }
+   public function add()
+   {
+       $genre= new Genre;
+       $genres= $genre->getLists();
+       
+       $genrejoin =\DB::table('contents')
+       ->leftjoin('genres','contents.genres_id','=','genres.id')
+       ->get();
+       
+       return view('admin.work.create',['genres'=>$genres]);
+   }
+   public function create(ContentRequest $request)
+   {  $data = [
+        'title' => $request->title,
+        'bodies' => $request->bodies,
+        'genres_id' => $request->genres_id,
+    ];
     
-    public function create(Request $request){
-        
-        $this->validate($request, Content::$promise);
-        
-        $contents=new Content;
-        $form=$request->all();
-        
-        if (isset($form['image'])) {
-        $path = $request->file('image')->store('public/image');
-        $contents->image = basename($path);
-      } else {
-          $contents->image = null;
-      }
-        
-        unset($form['_token']);
-         unset($form['image']);
-        
-         $contents->fill($form);
-         $contents->save();
-        
-         return redirect('admin/work/create');
-    }
-    
+    $content=new Content;
+    $content->fill($data)->save();
+ 
+      return redirect('/admin/work/create')->with('poststatus','新規投稿しました');
+           
+           
+   }
     public function see()
     {
         return view('admin.work.see');
@@ -63,15 +60,10 @@ class WorkController extends Controller
         ]);
     }
     
-    public function index(Request $request)
+    public function index()
     {  
-        $view_title=$request->view_title;
-        if($view_title !=''){
-        $posts=Content::where('title',$view_title)->get();
-    }else{
-        $posts=Content::all();
-    }
-    return view('admin.work.index',['posts'=>$posts,'view_title'=>$view_title]);
+       $contents=Content::orderBy('created_at','desc')->get();
+    return view('admin.work.index',['contents'=>$contents]);
     }
     
     
@@ -97,4 +89,8 @@ class WorkController extends Controller
         $validated = $request->validate($promise, $message);
         return view('admin.work.see')->with(['validated'=>$validated]);
 }
+    public function next()
+    {
+    return view('admin.work.create');
+            }
 }

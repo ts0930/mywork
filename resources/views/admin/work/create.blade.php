@@ -21,40 +21,72 @@
 
 	<div class="form-group">
 		<label for="title" class="">タイトル</label>
-		<div class="">
-			{{ Form::text('title', null, array('class' => '')) }}
-		</div>
+	 <input
+                        id="title"
+                        name="title"
+                        class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}"
+                        value="{{ old('title') }}"
+                        type="text"
+                    >
+                    @if ($errors->has('title'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('title') }}
+                        </div>
+                    @endif
 	</div>
 	<div class="form-group">
 		<label for="url" class="">URL</label>
 		<div class="">
-			{{ Form::text('url', null, array('class' => '')) }}
+		 <input
+                        id="url"
+                        name="url"
+                        class="form-control 
+                        value="{{ old('url') }}"
+                        type="text">
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="words" class="">初知り単語</label>
 		<div class="">
-			{{ Form::text('words', null, array('class' => '')) }}
+		<input
+                        id="words"
+                        name="words"
+                        class="form-control 
+                        value="{{ old('words') }}"
+                        type="text">
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label for="genres" class="">ジャンル</label>
-		<div class="">
-			<select name="genres" type="text" class="">
-				<option></option>
-				<option value="" selected="selected">▼ひとつ選択してください</option>
-				<option value="fashion" name="1"　>ファッション</option>
-				<option value="economic" name="2">経済</option>
-				<option value="other" name="3">その他</option>
-			</select>
-		</div>
-	</div>
-
+     <p>
+       <div class="form-group">
+                    <label for="subject">
+                        カテゴリー
+                    </label>
+                    <select
+                        id="genre_id"
+                        name="genre_id"
+                        class="form-control {{ $errors->has('genre_id') ? 'is-invalid' : '' }}"
+                        value="{{ old('genre_id') }}"
+                    >
+                     @foreach($genres as $id => $name)
+                         <option value="{{ $id }}">{{ $name }}</option>
+                    @endforeach
+               </select>
+ 
 	<div class="form-group">
 		<label for="bodies" class="">本文</label>
 		<div class="">
-			{{ Form::textarea('bodies', null, array('class' => '')) }}
+		<textarea
+                        id="bodies"
+                        name="bodies"
+                        class="form-control {{ $errors->has('bodies') ? 'is-invalid' : '' }}"
+                        rows="4"
+                    >{{ old('bodies') }}</textarea>
+                    @if ($errors->has('bodies'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('bodies') }}
+                        </div>
+                    @endif
 		</div>
 	</div>
 	<div class="form-group">

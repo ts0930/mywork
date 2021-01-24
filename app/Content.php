@@ -7,16 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Content extends Model
 {
     public function genre(){
-      return $this->belongsTo('App/Genre');
+      return $this->belongsTo('App\Genre');
     }
       
-      protected $guarded = array('id');
-      
-        public static $promise = array(
-        'title' => 'required',
-        'bodies' => 'required',
-        'url'=>'required',
-    );
+      protected $fillable=[
+        'title',
+        'bodies',
+        'genres_id'
+        ];
     
+    public function user(){
+      return $this->belongsTo('App\Player');
+    }
 
 }
