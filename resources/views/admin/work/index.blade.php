@@ -6,6 +6,12 @@
 <div class="col-xs-8 col-xs-offset-2">
         <h1>物事一覧</h1>
         
+        
+    @if(session('err_msg'))
+        <p class='text-danger'>
+            {{session('err_msg')}}
+        </p>
+    @endif   
          <div class="col-md-8">
                             
          </div>
@@ -13,28 +19,50 @@
                             {{ csrf_field() }}
                             <input type="submit" class="btn btn-primary" value="検索">
           </div>
-                         <form action="{{ action('Admin\WorkController@index') }}" method="get">
-        @foreach($contents as $content)
-	<p>{{ $content->id }}</p>
-	<h2>タイトル：{{ $content->title }}
-		<small>投稿日：{{ date("Y年 m月 d日",strtotime($content->created_at)) }}</small>
-	</h2>
-	<p>カテゴリー：{{ $content->genre['name'],100}}</p>
-	<p>URL:{{$content->url}}</p>
-	<p>一言:{{$content->words}}</p>
-	<p>{!! nl2br(e(Str::limit($content->bodies))) !!}</p>
-	<p>{{link_to("/bbc/{$content->id}", '続きを読む', array('class' => 'btn btn-primary')) }}</p>
-	<hr />
-	</td>
-            <td class="text-nowrap">
-                    <p><a href="" class="btn btn-primary btn-sm">詳細</a></p>
-                    <p><a href="" class="btn btn-info btn-sm">編集</a></p>
-                    <p><a href="" class="btn btn-danger btn-sm">削除</a></p>
-            </td>
-@endforeach
+    <form action="{{ action('Admin\WorkController@index') }}" method="get">
+        <tr>
+            <th>記事番号</th>
+            <th>タイトル</th>
+            <th>投稿日</th>
+            <th>カテゴリー</th>
+            <th>画像</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    @foreach($contents as $content)
+    <table class='table table-stripped'>
+        <tr>
+            <td>{{$content->id}}</td>
+            <td><a href="/admin/work/{{$content->id}}">{{$content->title}}</a></td>
+            <td>{{$content->updated_at}}</td>
+            <td>{{$content->name}}</td>
+            <td><img class="newsimg" src="{{$content->image}}"></td>
+            <td><a href='/admin/work/edit/{{$content->id}}'" class="btn btn-primary" >編集</button></td>
+            
+            
+　　　 <form action="{{route('delete',$content->id) }}" method="post" enctype="multipart/form-data onSubmit="return checkDelete()">
+       @csrf
+            <td><button type="submit" class="btn btn-primary" onclick= >削除</button></td>
+            <td></td>
+            </form>
+        </tr>
+    </table>
+    @endforeach
 <div class="mt-4 mb-4">
-    <a href="{{action('Admin\WorkController@add')}}" class="btn btn-primary">
+    <a href="{{action('Admin\WorkController@create')}}" class="btn btn-primary">
         投稿新規作成
     </a>
+   
 </div>
+<script>
+function checkDelete(){
+    if(window.confirm('削除してもよろしいですか？')){
+        return true;
+    }else{
+        return false;
+    }
+        
+    }
+</script>
 @endsection

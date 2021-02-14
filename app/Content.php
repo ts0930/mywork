@@ -6,15 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Content extends Model
 {
-    public function genre(){
-      return $this->belongsTo('App\Genre');
-    }
-      
+      protected $table='contents';
       protected $fillable=[
         'title',
         'bodies',
-        'genres_id'
+        'genres_id',
+        'image',
+        'url'
         ];
+    public function genre(){
+      return $this->belongsTo('App\Genre');
+    }
+     
     
     public function user(){
       return $this->belongsTo('App\Player');

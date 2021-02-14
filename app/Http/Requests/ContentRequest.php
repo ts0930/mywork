@@ -13,7 +13,7 @@ class ContentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,6 @@ class ContentRequest extends FormRequest
         return [
            'title' => 'required|max:40',
             'bodies' => 'required|max:1000',
-            'genres_id' => 'required|integer',
         ];
     }
      public function messages()
@@ -36,8 +35,6 @@ class ContentRequest extends FormRequest
             'title.max' => '名前は40文字以内で入力してください',
             'bodies.required' => 'メッセージを入力してください',
             'bodies.max' => 'メッセージは1000文字以内で入力してください',
-            'genres_id.required' => 'ジャンルを選択してください',
-            'genres_id.integer' => 'ジャンルの入力形式が不正です',
         ];
     }
 }

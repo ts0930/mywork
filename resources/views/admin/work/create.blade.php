@@ -9,8 +9,8 @@
        
         <h1>Mynews作成画面</h1>
         
-  <form action="{{ action('Admin\WorkController@create') }}" method="post" enctype="multipart/form-data">
-        
+  <form action="{{ action('Admin\WorkController@store') }}" method="post" enctype="multipart/form-data">
+@csrf
   @if (count($errors) > 0)
         <ul>
            @foreach($errors->all() as $error)
@@ -68,8 +68,8 @@
                         class="form-control {{ $errors->has('genre_id') ? 'is-invalid' : '' }}"
                         value="{{ old('genre_id') }}"
                     >
-                     @foreach($genres as $id => $name)
-                         <option value="{{ $id }}">{{ $name }}</option>
+                     @foreach($genres as $name)
+                         <option value="{{$name->id}}">{{ $name->name }}</option>
                     @endforeach
                </select>
  
@@ -95,11 +95,19 @@
                             <input type="file" class="form-control-file" name="image">
                         </div>
                     </div>
-
+    <a class='btn btn-secondry',href={{('admin.work.index')}}キャンセル</a>
 	<div class="form-group">
-	 {{ csrf_field() }}
 		<button type="submit" class="btn btn-primary">登録</button>
 	</div>
 </div>
-
+<script>
+function checkSubmit(){
+    if(window.confirm('登録してもよろしいですか？')){
+        return true;
+    }else{
+        return false;
+    }
+        
+    }
+</script>
 @endsection

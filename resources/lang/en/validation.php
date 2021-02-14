@@ -145,6 +145,9 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'title'=>'タイトル',
+        'bodies'=>'News内容'
+        ],
 
 ];
